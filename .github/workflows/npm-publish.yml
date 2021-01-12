@@ -4,11 +4,22 @@
 name: Node.js Package
 
 on:
-  release:
-    types: [created]
+  schedule:
+    - cron: '0 0 * * *'
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          if curl https://api.github.com/repos/Chocobozzz/PeerTube/releases/latest -o - | jq . | grep $GITHUB_REF; then
+            return 1
+          else
+            return 0
+          fi 
+
   build:
+    needs: check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
