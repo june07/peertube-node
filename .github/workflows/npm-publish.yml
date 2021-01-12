@@ -54,7 +54,7 @@ jobs:
               repo: context.repo.repo,
               path: '/package.json'
             })
-            let package_json = JSON.parse(response.data)
+            let package_json = response.data
             package_json.version = peertubeReleaseVersion
             github.repos.createOrUpdateFileContents({
               owner: context.repo.owner,
