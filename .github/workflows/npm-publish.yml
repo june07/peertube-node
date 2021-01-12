@@ -49,12 +49,12 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            let package_json = await github.repos.getContent({
+            let response = await github.repos.getContent({
               owner: context.repo.owner,
               repo: context.repo.repo,
               path: '/package.json'
             })
-            package_json = JSON.parse(package_json)
+            let package_json = JSON.parse(response.data)
             package_json.version = peertubeReleaseVersion
             github.repos.createOrUpdateFileContents({
               owner: context.repo.owner,
