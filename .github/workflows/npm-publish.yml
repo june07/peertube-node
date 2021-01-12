@@ -37,10 +37,13 @@ jobs:
           fi
 
   bump:
+    outputs:
+      ref: ${{ steps.step1.outputs.ref }}
     needs: check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v3
+      - id: step1
+        uses: actions/github-script@v3
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -52,7 +55,7 @@ jobs:
             let package_json = Buffer.from(response.data.content, 'base64').toString()
             package_json = JSON.parse(package_json)
             package_json.version = "${{ needs.check.outputs.version }}"
-            await github.repos.createOrUpdateFileContents({
+            response = await github.repos.createOrUpdateFileContents({
               owner: context.repo.owner,
               repo: context.repo.repo,
               path: 'package.json',
@@ -61,6 +64,7 @@ jobs:
               sha: response.data.sha,
               tag_name: "${{ needs.check.outputs.version }}"
             })
+            console.log(`::set-output name=ref::${response.data.tree.sha}`)
 
   build:
     needs: bump
@@ -70,7 +74,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-          ref: 'default'
+          ref: "${{ needs.bump.outputs.ref }}"
       - run: npm ci
       - run: npm build
 
