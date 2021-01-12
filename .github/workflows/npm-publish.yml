@@ -45,7 +45,7 @@ jobs:
       - run: npm build
 
   bump:
-    needs: build
+    needs: [ check, build ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v3
@@ -58,7 +58,7 @@ jobs:
               path: '/package.json'
             })
             let package_json = response.data
-            package_json.version = "${{outputs.peertubeReleaseVersion}}"
+            package_json.version = "${{ needs.check.outputs.peertubeReleaseVersion }}"
             github.repos.createOrUpdateFileContents({
               owner: context.repo.owner,
               repo: context.repo.repo,
