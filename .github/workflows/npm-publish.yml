@@ -57,14 +57,14 @@ jobs:
             let response = await github.repos.getContent({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              path: '/package.json'
+              path: 'package.json'
             })
             let package_json = response.data
             package_json.version = "${{ needs.check.outputs.version }}"
             github.repos.createOrUpdateFileContents({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              path: '/package.json',
+              path: 'package.json',
               message: 'automated version bump',
               content: package_json,
               tag_name: "${{ needs.check.outputs.version }}"
