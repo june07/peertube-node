@@ -55,7 +55,7 @@ jobs:
               path: '/package.json'
             })
             let package_json = response.data
-            package_json.version = `${process.env.peertubeReleaseVersion}`
+            package_json.version = ${{ env.peertubeReleaseVersion }}
             github.repos.createOrUpdateFileContents({
               owner: context.repo.owner,
               repo: context.repo.repo,
