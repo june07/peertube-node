@@ -13,10 +13,8 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - run: pwd
-      - run: ls ..
       - run: |
-          version=$(cat ../package.json | jq .version);
+          version=$(curl https://raw.githubusercontent.com/june07/peertube-node/main/package.json -o - | jq .version);
           if curl https://api.github.com/repos/Chocobozzz/PeerTube/releases/latest -o - | jq . | grep $version; then
             exit 1;
           else
