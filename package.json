@@ -1,5 +1,5 @@
 {
-  "name": "peertube-node",
+  "name": "peertube",
   "version": "1.0.0",
   "description": "PeerTube Convenience Library for Node.js",
   "main": "openapi/dist/index.js",
