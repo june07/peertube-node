@@ -1,0 +1,25 @@
+{
+  "name": "peertube-node",
+  "version": "1.0.0",
+  "description": "PeerTube Convenience Library for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "openapi": "npx @openapitools/openapi-generator-cli generate -i https://raw.githubusercontent.com/Chocobozzz/PeerTube/develop/support/doc/api/openapi.yaml -g javascript -o openapi",
+    "build": "npm run openapi && cd openapi && npm install && npm run prepack",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/june07/peertube-node.git"
+  },
+  "keywords": [
+    "PeerTube",
+    "OpenAPI"
+  ],
+  "author": "june07",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/june07/peertube-node/issues"
+  },
+  "homepage": "https://github.com/june07/peertube-node#readme"
+}
