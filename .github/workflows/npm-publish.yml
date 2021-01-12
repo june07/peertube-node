@@ -49,7 +49,7 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            let package_json = await octokit.repos.getContent({
+            let package_json = await github.repos.getContent({
               owner: context.repo.owner,
               repo: context.repo.repo,
               path: '/package.json'
