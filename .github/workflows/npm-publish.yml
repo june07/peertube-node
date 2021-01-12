@@ -17,9 +17,9 @@ jobs:
           releaseVersionName=$(curl https://api.github.com/repos/june07/peertube-node/releases/latest -o - | jq .name);
           peertubeReleaseVersionName=$(curl https://api.github.com/repos/Chocobozzz/PeerTube/releases/latest -o - | jq .name);
           
-          [[ $releaseVersionName =~ [0-9]+\.[0-9]+\.[0-9]+ ]]
-          releaseVersion=${BASH_REMATCH[0]}
-          echo "releaseVersion=$releaseVersion" >> $GITHUB_ENV
+          [[ $peertubeReleaseVersionName =~ [0-9]+\.[0-9]+\.[0-9]+ ]]
+          peertubeReleaseVersion=${BASH_REMATCH[0]}
+          echo "peertubeReleaseVersion=$peertubeReleaseVersion" >> $GITHUB_ENV
 
           echo "Version name from package.json is $releaseVersionName"
           echo "Version name from peertube release is $peertubeReleaseVersionName"
@@ -80,5 +80,5 @@ jobs:
             github.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: $releaseVersion
+              tag_name: $peertubeReleaseVersion
             })
