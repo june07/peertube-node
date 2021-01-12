@@ -14,11 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          version=$(cat package.json | jq .version)
+          pwd
+          ls
+          version=$(cat ./package.json | jq .version)
           if curl https://api.github.com/repos/Chocobozzz/PeerTube/releases/latest -o - | jq . | grep $version; then
-            return 1
+            exit 1
           else
-            return 0
+            exit 2 #exit 0
           fi 
 
   build:
