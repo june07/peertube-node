@@ -59,14 +59,16 @@ jobs:
               repo: context.repo.repo,
               path: 'package.json'
             })
-            let package_json = response.data
+            let package_json = Buffer.from(response.data.content, 'base64').toString()
+            package_json = JSON.parse(package_json)
             package_json.version = "${{ needs.check.outputs.version }}"
             github.repos.createOrUpdateFileContents({
               owner: context.repo.owner,
               repo: context.repo.repo,
               path: 'package.json',
               message: 'automated version bump',
-              content: package_json,
+              content: Buffer.from(JSON.stringify(package_json)).toString('base64'),
+              sha,
               tag_name: "${{ needs.check.outputs.version }}"
             })
 
