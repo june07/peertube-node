@@ -35,19 +35,8 @@ jobs:
             exit 0;
           fi
 
-  build:
-    needs: check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-      - run: npm ci
-      - run: npm build
-
   bump:
-    needs: [ check, build ]
+    needs: check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v3
@@ -67,10 +56,21 @@ jobs:
               repo: context.repo.repo,
               path: 'package.json',
               message: 'automated version bump',
-              content: Buffer.from(JSON.stringify(package_json)).toString('base64'),
+              content: Buffer.from(JSON.stringify(package_json, null, 2)).toString('base64'),
               sha: response.data.sha,
               tag_name: "${{ needs.check.outputs.version }}"
             })
+
+  build:
+    needs: bump
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: npm ci
+      - run: npm build
 
   publish-npm:
     needs: bump
@@ -101,7 +101,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
   release:
-    needs: [ check, publish-npm ]
+    needs: [ publish-npm ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v3
