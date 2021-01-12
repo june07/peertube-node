@@ -53,6 +53,7 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            console.log("${{ needs.check.outputs}}")
             let response = await github.repos.getContent({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -66,7 +67,7 @@ jobs:
               path: '/package.json',
               message: 'automated version bump',
               content: package_json,
-              tag_name: "${{ needs.check.outputs.peertubeReleaseVersion }}""
+              tag_name: "${{ needs.check.outputs.peertubeReleaseVersion }}"
             })
 
   publish-npm:
