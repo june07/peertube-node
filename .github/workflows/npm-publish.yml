@@ -12,17 +12,18 @@ on:
 jobs:
   check:
     outputs:
-      version: ${{ steps.run.outputs.version }}
+      version: ${{ steps.step1.outputs.version }}
 
     runs-on: ubuntu-latest
     steps:
-      - run: |
+      - id: step1
+        run: |
           releaseVersionName=$(curl https://api.github.com/repos/june07/peertube-node/releases/latest -o - | jq .name);
           peertubeReleaseVersionName=$(curl https://api.github.com/repos/Chocobozzz/PeerTube/releases/latest -o - | jq .name);
           
           [[ $peertubeReleaseVersionName =~ [0-9]+\.[0-9]+\.[0-9]+ ]]
           peertubeReleaseVersion=${BASH_REMATCH[0]}
-          echo "Setting peertubeReleaseVersion to $peertubeReleaseVersion"
+          echo "Setting version to $peertubeReleaseVersion"
           echo "::set-output name=version::$peertubeReleaseVersion"
 
           echo "Version name from package.json is $releaseVersionName"
