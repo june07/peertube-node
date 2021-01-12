@@ -68,7 +68,7 @@ jobs:
               path: 'package.json',
               message: 'automated version bump',
               content: Buffer.from(JSON.stringify(package_json)).toString('base64'),
-              sha,
+              sha: response.data.sha,
               tag_name: "${{ needs.check.outputs.version }}"
             })
 
