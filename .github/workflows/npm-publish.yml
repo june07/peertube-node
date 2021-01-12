@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     
   #schedule:
-  #  - cron: '*/5 * * * *'
+  #  - cron: '*/60 * * * *'
 
 jobs:
   check:
@@ -29,6 +29,7 @@ jobs:
           echo "Version name from package.json is $releaseVersionName"
           echo "Version name from peertube release is $peertubeReleaseVersionName"
           if [ $releaseVersionName == $peertubeReleaseVersionName ]; then
+          echo "No version change detected, exiting."
             exit 1;
           else
             echo "Version name mismatch found, running additional jobs."
@@ -51,7 +52,7 @@ jobs:
             let package_json = Buffer.from(response.data.content, 'base64').toString()
             package_json = JSON.parse(package_json)
             package_json.version = "${{ needs.check.outputs.version }}"
-            github.repos.createOrUpdateFileContents({
+            await github.repos.createOrUpdateFileContents({
               owner: context.repo.owner,
               repo: context.repo.repo,
               path: 'package.json',
