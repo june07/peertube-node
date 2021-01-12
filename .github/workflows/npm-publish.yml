@@ -19,7 +19,7 @@ jobs:
           
           [[ $peertubeReleaseVersionName =~ [0-9]+\.[0-9]+\.[0-9]+ ]]
           peertubeReleaseVersion=${BASH_REMATCH[0]}
-          echo "peertubeReleaseVersion=$peertubeReleaseVersion" >> $GITHUB_ENV
+          echo "peertubeReleaseVersion=${peertubeReleaseVersion}" >> $GITHUB_ENV
 
           echo "Version name from package.json is $releaseVersionName"
           echo "Version name from peertube release is $peertubeReleaseVersionName"
@@ -55,7 +55,7 @@ jobs:
               path: '/package.json'
             })
             let package_json = response.data
-            package_json.version = process.env.peertubeReleaseVersion
+            package_json.version = peertubeReleaseVersion || process.env.peertubeReleaseVersion
             github.repos.createOrUpdateFileContents({
               owner: context.repo.owner,
               repo: context.repo.repo,
