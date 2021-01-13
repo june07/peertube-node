@@ -71,10 +71,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: "${{ needs.bump.outputs.ref }}"
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-          ref: "${{ needs.bump.outputs.ref }}"
       - run: npm ci
       - run: npm build
 
