@@ -64,7 +64,7 @@ jobs:
               sha: response.data.sha,
               tag_name: "${{ needs.check.outputs.version }}"
             })
-            console.log(`::set-output name=ref::${response.data.commit.tree.sha}`)
+            console.log(`::set-output name=ref::${response.data.commit.sha}`)
 
   build:
     needs: bump
